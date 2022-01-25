@@ -61,23 +61,19 @@
               </div>
             </div>
 
-            <form action="https://mesapartesvirtual.pcm.gob.pe/" id="formDocumento" method="post">    <div class="panel panel-default">
+            <b-form @submit="onSubmit" @reset="onReset" v-if="show" id="formDocumento" method="post">    <div class="panel panel-default">
               <div class="panel-heading subTituloHome">Datos del solicitante: </div>
               <div class="panel-body">
-
                 <div class="col-md-10 col-md-offset-1">
                   <div class="row marginB-20">
                     <div class="form-group">
                       <div class="col-md-4">
-                        <label for="IdTipoPersona" class="control-label">Tipo de persona</label>
-                        <select class="form-control" id="IdTipoPersona" name="IdTipoPersona"><option value="03">CIUDADANO</option>
-                          <option value="02">PERSONA JURIDICA</option>
-                        </select>
+                        <label class="control-label">Tipo de persona</label>
+                        <b-form-select class="form-control" v-model="selected" :options="options"></b-form-select>
                       </div>
                     </div>
                   </div>
                   <div id="divRuc" class="row marginB-20">
-
                     <div class="form-group">
                       <div class="col-md-4">
                         <label for="ruc" class="control-label">Nro de RUC</label>
@@ -96,7 +92,7 @@
                     <div class="form-group">
                       <div class="col-md-4">
                         <label for="dni" class="control-label">Nro DNI</label>
-                        <input type="text" class="form-control" id="dni" placeholder="Nro DNI" onkeypress="return isNumber(event)" />
+                        <input type="text" class="form-control" id="dni" placeholder="Nro DNI" v-model="dniuser" onkeypress="return isNumber(event)" />
                       </div>
                     </div>
                   </div>
@@ -153,31 +149,17 @@
                       <div class="form-group">
                         <div class="col-md-4">
                           <label for="IdTipoDocumento" class="control-label">Tipo de documento</label>
-                          <select class="form-control" id="IdTipoDocumento" name="IdTipoDocumento"><option value="">[SELECCIONE]</option>
-                            <option value="004">AYUDA MEMORIA</option>
-                            <option value="233">CARTA</option>
-                            <option value="005">DIRECTIVA</option>
-                            <option value="015">EXPOSICI&#211;N DE MOTIVOS</option>
-                            <option value="009">INFORME</option>
-                            <option value="010">MEMORANDO</option>
-                            <option value="234">MEMORANDO MULTIPLE</option>
-                            <option value="013">NOTA DE ELEVACI&#211;N</option>
-                            <option value="011">OFICIO</option>
-                            <option value="250">OFICIO CIRCULAR</option>
-                            <option value="012">OFICIO MULTIPLE</option>
-                            <option value="238">OTROS</option>
-                            <option value="232">PROVEIDO</option>
-                            <option value="006">RESOLUCI&#211;N</option>
-                            <option value="008">RESOLUCI&#211;N JEFATURAL</option>
-                            <option value="016">RESOLUCI&#211;N VICEMINISTERIAL</option>
-                            <option value="014">RESUMEN EJECUTIVO</option>
-                            <option value="237">SOBRE CERRADO</option>
-                            <option value="235">SOLICITUD</option>
-                          </select>
+                          <b-form-select class="form-control" v-model="selected1" :options="options1"></b-form-select>
+
                         </div>
                         <div class="col-md-4">
                           <label for="nrodoc" class="control-label">Nro de documento</label>
                           <input type="text" class="form-control" id="nrodoc" placeholder="Nro de documento" />
+                        </div>
+                        <div class="col-md-4">
+                          <label for="nrodoc" class="control-label">Intendencia Dirigida</label>
+                          <b-form-select class="form-control" v-model="selected2" :options="options2"></b-form-select>
+
                         </div>
                       </div>
                     </div>
@@ -300,7 +282,7 @@
                 </div>
 
               </div>
-            </form>
+            </b-form>
 
 
 
@@ -317,11 +299,90 @@
 <script>
 
 
+import axios from "axios";
+
 export default {
   name: 'App',
-  components: {
+  data() {
+    return {
+      dniuser: '',
+      errors: [],
+      selected: null,
+      options: [
+        { value: null, text: 'TIPO DE PERSONA' },
+        { value: '01', text: 'CIUDADANO' },
+        { value: '02', text: 'PERSONA JURIDICA' }
+      ],
+      selected1: null,
+      options1: [
+        { value: null, text: '[SELECCIONE]' },
+        { value: '01', text: 'CARTA' },
+        { value: '02', text: 'DIRECTIVA' },
+        { value: '02', text: 'PERSONA JURIDICA' },
+        { value: '02', text: 'EXPOSICIÓN DE MOTIVOS' },
+        { value: '02', text: 'INFORME' },
+        { value: '02', text: 'MEMORANDO' },
+        { value: '02', text: 'MEMORANDO MULTIPLE' },
+        { value: '02', text: 'NOTA DE ELEVACIÓN' },
+        { value: '02', text: 'OFICIO' },
+        { value: '02', text: 'OTROS' },
+        { value: '02', text: 'PROVEIDO' },
+        { value: '02', text: 'SOLICITUD' },
+        { value: '02', text: 'SOBRE CERRADO' },
+        { value: '02', text: 'RESUMEN EJECUTIVO' },
+        { value: '02', text: 'RESOLUCIÓN' },
+        { value: '02', text: 'RESOLUCIÓN JEFATURAL' },
+        { value: '02', text: 'RESOLUCIÓN VICEMINISTERIAL' },
 
+      ],
+      selected2: null,
+      options2: [
+        { value: null, text: '[SELECCIONE]' },
+        { value: '01', text: 'CONCYTEC' },
+        { value: '02', text: 'PROCIENCIA' },
+      ],
+      form: {
+        email: '',
+        name: '',
+      },
+      show: true,
+    }
+  },
+  components: {},
+  methods: {
+    // Pushes posts to the server when called.
+    postPost() {
+      let session_url = 'http://190.12.69.77:9122/reniecpide/client/consultarpersona';
+      let uname = 'usrCreaInter';
+      let pass = 'usrCreaInter';
+      axios.post(session_url, {dni: '73048416'},{
+        auth: {
+          username: uname,
+          password: pass
+        }
+      }).catch(e => {
+            this.errors.push(e)
+          })
+    },
+    onSubmit(event) {
+      event.preventDefault()
+      alert(JSON.stringify(this.form))
+    },
+    onReset(event) {
+      event.preventDefault()
+      // Reset our form values
+      this.form.email = ''
+      this.form.name = ''
+      this.form.food = null
+      this.form.checked = []
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    }
   }
+
 }
 </script>
 
