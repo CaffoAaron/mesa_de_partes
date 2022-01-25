@@ -61,7 +61,8 @@
               </div>
             </div>
 
-            <b-form @submit="onSubmit" @reset="onReset" v-if="show" id="formDocumento" method="post">    <div class="panel panel-default">
+            <b-form @submit="onSubmit" @reset="onReset" v-if="show" id="formDocumento" method="post">
+              <div class="panel panel-default">
               <div class="panel-heading subTituloHome">Datos del solicitante: </div>
               <div class="panel-body">
                 <div class="col-md-10 col-md-offset-1">
@@ -69,19 +70,19 @@
                     <div class="form-group">
                       <div class="col-md-4">
                         <label class="control-label">Tipo de persona</label>
-                        <b-form-select class="form-control" v-model="selected" :options="options"></b-form-select>
+                        <b-form-select class="form-control" v-model="selected" :options="options" @change="onChange()">Tipo de Persona</b-form-select>
                       </div>
                     </div>
                   </div>
-                  <div id="divRuc" class="row marginB-20">
+                  <div id="divRuc" class="row marginB-20" v-if="show2" >
                     <div class="form-group">
-                      <div class="col-md-4">
+                      <div class="col-md-4" >
                         <label for="ruc" class="control-label">Nro de RUC</label>
                         <input type="text" class="form-control" id="ruc" placeholder="Nro de RUC" onkeypress="return isNumber(event)" />
                       </div>
-                      <div class="col-md-8">
-                        <label for="raz" class="control-label">Razón Social</label>
-                        <input type="text" class="form-control" id="raz" placeholder="Razón Social" />
+                      <div class="col-md-8" >
+                        <label for="raz" class="control-label" >Razón Social</label>
+                        <input type="text" class="form-control" id="raz" placeholder="Razón Social"/>
                       </div>
 
                     </div>
@@ -305,11 +306,11 @@ export default {
   name: 'App',
   data() {
     return {
+
       dniuser: '',
       errors: [],
       selected: null,
       options: [
-        { value: null, text: 'TIPO DE PERSONA' },
         { value: '01', text: 'CIUDADANO' },
         { value: '02', text: 'PERSONA JURIDICA' }
       ],
@@ -346,6 +347,7 @@ export default {
         name: '',
       },
       show: true,
+      show2: false,
     }
   },
   components: {},
@@ -380,6 +382,13 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
+    },
+    onChange() {
+      if (this.selected ==='01') {
+        this.show2 = false
+      } else {
+        this.show2 = true
+      }
     }
   }
 
