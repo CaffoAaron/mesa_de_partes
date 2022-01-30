@@ -52,16 +52,13 @@
           </div>
           <div class="contentBody">
 
-
-
-
             <div class="panel panel-default">
               <div class="panel-heading text-center tituloHome">ENVÍO DE DOCUMENTOS</div>
               <div class="panel-body"><p>Estimados usuarios, para mayor facilidad, se ha puesto a su disposición este formulario, que le permitirá el envío de documentos a la Presidencia de Consejo de Ministros.</p><p>Esta modalidad de recepción estará activa en tanto dura la emergencia nacional declarada por D.S. N° 044-2020-PCM</p>
               </div>
             </div>
 
-            <b-form @submit="onSubmit" @reset="onReset" v-if="show" id="formDocumento" method="post">
+            <b-form @submit="onSubmit" v-if="show" id="formDocumento" >
               <div class="panel panel-default">
               <div class="panel-heading subTituloHome">Datos del solicitante: </div>
               <div class="panel-body">
@@ -78,11 +75,11 @@
                     <div class="form-group">
                       <div class="col-md-4" >
                         <label for="ruc" class="control-label">Nro de RUC</label>
-                        <input type="text" class="form-control" id="ruc" placeholder="Nro de RUC" onkeypress="return isNumber(event)" />
+                        <input type="text" class="form-control" v-model="NroRUC" id="ruc" placeholder="Nro de RUC" onkeypress="return isNumber(event)" />
                       </div>
                       <div class="col-md-8" >
                         <label for="raz" class="control-label" >Razón Social</label>
-                        <input type="text" class="form-control" id="raz" placeholder="Razón Social"/>
+                        <input type="text" class="form-control" v-model="RazónSocial" id="raz" placeholder="Razón Social"/>
                       </div>
 
                     </div>
@@ -93,7 +90,7 @@
                     <div class="form-group">
                       <div class="col-md-4">
                         <label for="dni" class="control-label">Nro DNI</label>
-                        <input type="text" class="form-control" id="dni" placeholder="Nro DNI" v-model="dniuser" onkeypress="return isNumber(event)" />
+                        <input type="text" class="form-control" id="dni" placeholder="Nro DNI" v-model="NroDNI" onkeypress="return isNumber(event)" />
                       </div>
                     </div>
                   </div>
@@ -101,15 +98,15 @@
                     <div class="form-group">
                       <div class="col-md-4">
                         <label for="pat" class="control-label">Apellido paterno</label>
-                        <input type="text" class="form-control" id="pat" placeholder="Apellido paterno" />
+                        <input type="text" class="form-control" id="pat" v-model="ApellidoPaterno" placeholder="Apellido paterno" />
                       </div>
                       <div class="col-md-4">
                         <label for="mat" class="control-label">Apellido materno</label>
-                        <input type="text" class="form-control" id="mat" placeholder="Apellido materno" />
+                        <input type="text" class="form-control" id="mat" v-model="ApellidoMaterno" placeholder="Apellido materno" />
                       </div>
                       <div class="col-md-4">
                         <label for="nom" class="control-label">Nombres</label>
-                        <input type="text" class="form-control" id="nom" placeholder="Nombres" />
+                        <input type="text" class="form-control" id="nom" v-model="Nombres" placeholder="Nombres" />
                       </div>
                     </div>
                   </div>
@@ -117,7 +114,7 @@
                     <div class="form-group">
                       <div class="col-md-4">
                         <label for="tel" class="control-label">Teléfono</label>
-                        <input type="text" class="form-control" id="tel" placeholder="Teléfono" />
+                        <input type="text" class="form-control" id="tel" v-model="Teléfono" placeholder="Teléfono" />
                       </div>
                     </div>
                   </div>
@@ -125,7 +122,7 @@
                     <div class="form-group">
                       <div class="col-md-4">
                         <label for="correo" class="control-label">Correo</label>
-                        <input type="email" class="form-control" id="correo" placeholder="Correo" />
+                        <input type="email" class="form-control" id="correo"  v-model="Correo" placeholder="Correo" />
                       </div>
                     </div>
                   </div>
@@ -133,7 +130,7 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <label for="dir" class="control-label">Dirección</label>
-                        <input type="text" class="form-control" id="dir" placeholder="Dirección" />
+                        <input type="text" class="form-control" id="dir" v-model="Dirección" placeholder="Dirección" />
                       </div>
                     </div>
                   </div>
@@ -155,7 +152,7 @@
                         </div>
                         <div class="col-md-4">
                           <label for="nrodoc" class="control-label">Nro de documento</label>
-                          <input type="text" class="form-control" id="nrodoc" placeholder="Nro de documento" />
+                          <input type="text" v-model="NroDocumento" class="form-control" id="nrodoc" placeholder="Nro de documento" />
                         </div>
                         <div class="col-md-4">
                           <label for="nrodoc" class="control-label">Intendencia Dirigida</label>
@@ -168,7 +165,7 @@
                       <div class="form-group">
                         <div class="col-md-4">
                           <label for="folios" class="control-label">Nro de folios</label>
-                          <input type="text" class="form-control" id="folios" placeholder="Nro de folios" value="0" />
+                          <input type="text" v-model="NroFolios" class="form-control" id="folios" placeholder="Nro de folios" value="0" />
                         </div>
                       </div>
                     </div>
@@ -176,7 +173,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label for="asu" class="control-label">Asunto</label>
-                          <textarea class="form-control" id="asu" placeholder="Asunto" rows="4"></textarea>
+                          <textarea class="form-control" v-model="Asunto" id="asu" placeholder="Asunto" rows="4"></textarea>
                         </div>
                       </div>
                     </div>
@@ -263,7 +260,7 @@
 
                     <div class="row marginB-20">
                       <div class="form-group text-center">
-                        <button id="btnEnviar" type="submit" class="btn btn-danger">
+                        <button id="btnEnviar"  class="btn btn-danger" @click="enviarData">
                           ENVIAR
                         </button>
                       </div>
@@ -309,7 +306,20 @@ export default {
 
       dniuser: '',
       errors: [],
+      NroRUC: '',
+      RazónSocial: '',
+      NroDNI:'',
+      ApellidoPaterno: '',
+      ApellidoMaterno: '',
+      Nombres: '',
+      Teléfono: '',
+      Correo: '',
+      Dirección: '',
+      NroDocumento: '',
+      NroFolios: '',
+      Asunto:'',
       selected: null,
+      enviar: {},
       options: [
         { value: '01', text: 'CIUDADANO' },
         { value: '02', text: 'PERSONA JURIDICA' }
@@ -366,9 +376,28 @@ export default {
             this.errors.push(e)
           })
     },
-    onSubmit(event) {
-      event.preventDefault()
-      alert(JSON.stringify(this.form))
+    enviarData(){
+      this.enviar.nroDocumento = this.NroDocumento;
+      this.enviar.nroFolios = this.NroFolios;
+      this.enviar.asunto = this.Asunto;
+      this.enviar.tipoPersona = this.selected;
+      this.enviar.tipoDocumento = this.selected1;
+      this.enviar.intendenciaDirigida = this.selected2;
+
+      this.enviar.nroRUC = this.NroRUC;
+      this.enviar.razonSocial = this.RazonSocial;
+      this.enviar.dni = this.NroDNI;
+      this.enviar.apellidoPaterno = this.ApellidoPaterno;
+      this.enviar.apellidoMaterno = this.ApellidoMaterno;
+      this.enviar.nombre = this.Nombres;
+      this.enviar.teléfono = this.Teléfono;
+      this.enviar.correo = this.Correo;
+      this.enviar.dirección = this.Dirección;
+      axios.post("http://localhost:8080/api/mesaDePartes", this.enviar)
+      console.log(this.enviar);
+    },
+    onSubmit() {
+      alert(this.enviar)
     },
     onReset(event) {
       event.preventDefault()
