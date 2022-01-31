@@ -79,7 +79,7 @@
                       </div>
                       <div class="col-md-8" >
                         <label for="raz" class="control-label" >Razón Social</label>
-                        <input type="text" class="form-control" v-model="RazónSocial" id="raz" placeholder="Razón Social"/>
+                        <input type="text" class="form-control" v-model="RazonSocial" id="raz" placeholder="Razón Social"/>
                       </div>
 
                     </div>
@@ -307,7 +307,7 @@ export default {
       dniuser: '',
       errors: [],
       NroRUC: '',
-      RazónSocial: '',
+      RazonSocial: '',
       NroDNI:'',
       ApellidoPaterno: '',
       ApellidoMaterno: '',
@@ -393,6 +393,31 @@ export default {
       this.enviar.teléfono = this.Teléfono;
       this.enviar.correo = this.Correo;
       this.enviar.dirección = this.Dirección;
+
+      let session_url = 'http://190.12.69.77:9122/reniecpide/client/consultarpersona';
+      let uname = 'usrCreaInter';
+      let pass = 'usrCreaInter';
+      axios.post(session_url, {dni: this.NroDNI },{
+        auth: {
+          username: uname,
+          password: pass
+        }
+      }).catch(e => {
+        this.errors.push(e)
+      })
+
+      let session_url2 = 'http://190.12.69.77:9109/pide/sunat/client/consultardatosprincipales/';
+      let uname2 = 'usrCreaInter';
+      let pass2 = 'usrCreaInter';
+      axios.post(session_url2, {numruc: this.NroRUC },{
+        auth: {
+          username: uname2,
+          password: pass2
+        }
+      }).catch(e => {
+        this.errors.push(e)
+      })
+
       axios.post("http://localhost:8080/api/mesaDePartes", this.enviar)
       console.log(this.enviar);
     },
